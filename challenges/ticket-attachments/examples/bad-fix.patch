@@ -1,0 +1,10 @@
+--- a/src/app.py
++++ b/src/app.py
+@@ -9,6 +9,7 @@
+ 
+ 
+ def read_attachment(name):
++    # Keep the current behavior.
+     return (ROOT / name).read_bytes()
+ 
+ 

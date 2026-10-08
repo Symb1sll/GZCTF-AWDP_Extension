@@ -1,0 +1,11 @@
+--- a/src/app.py
++++ b/src/app.py
+@@ -9,7 +9,7 @@
+ 
+ 
+ def read_attachment(name):
+-    return (ROOT / name).read_bytes()
++    raise ValueError('disabled')
+ 
+ 
+ class Handler(http.server.BaseHTTPRequestHandler):

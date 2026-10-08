@@ -1,0 +1,11 @@
+**/node_modules
+**/bin
+**/obj
+**/build
+**/.npm-cache
+**/.nuget-packages
+.dotnet-home
+.git
+**/appsettings*.json
+**/*.env
+**/coverage.json

@@ -1,0 +1,239 @@
+{
+  "schema_version": 1,
+  "upstream_repository": "https://github.com/GZTimeWalker/GZCTF.git",
+  "upstream_commit": "7c42b6ce82f0f1ae5e29ee8750df4281016b459e",
+  "hash_mode": "raw-bytes",
+  "upstream_migrations": [
+    "20240202021414_Initialize",
+    "20240208144221_FormatableData",
+    "20240424194046_UpdateModelLimits",
+    "20240502062801_UpdateLogModel",
+    "20240913074608_RenameTagToCategory",
+    "20241117134035_RenameOrgToDiv",
+    "20241120075814_AddDisableBloodBonus"
+  ],
+  "files": [
+    {
+      "path": "src/GZCTF.Test/AwdpLedgerTest.cs",
+      "original_sha256": null,
+      "overlay_sha256": "c3a3d888389fae26dc0598008fcf275baf9b03c9dfac14ba3a0908aa67a0088b"
+    },
+    {
+      "path": "src/GZCTF.Test/AwdpQueueTest.cs",
+      "original_sha256": null,
+      "overlay_sha256": "8ff2a1bf5d03b52b39f51f7b1b47a0e7967e786107195363290a002afe6245c3"
+    },
+    {
+      "path": "src/GZCTF/ClientApp/package.json",
+      "original_sha256": "38269f4ae3c88531e95dff87aaab5f1898303818cb5d80b96d3f8983bf6758fb",
+      "overlay_sha256": "92df6c0a0a5c354a70a764b4a015ba0511b7fcf5e9e8e718b6729c62f5b1e0c7"
+    },
+    {
+      "path": "src/GZCTF/ClientApp/src/components/ScoreboardTable.tsx",
+      "original_sha256": "4334aec4678f662d7d3d1227b658dc232e881002809c2025184483220f669549",
+      "overlay_sha256": "407fb1840f3c082dbb573d4a6a8d18f9958f88a993d10bc09680a98f7a452409"
+    },
+    {
+      "path": "src/GZCTF/ClientApp/src/components/mobile/ScoreboardTable.tsx",
+      "original_sha256": "b30f73486bae4d67663505673a825d45de486c0300ebbeaa04e0bf6aa385cba4",
+      "overlay_sha256": "db89442990d66ad6497f3a126c6ae02c261a62ff3c6a67470053fd81d6b91247"
+    },
+    {
+      "path": "src/GZCTF/ClientApp/src/components/ChallengeModal.tsx",
+      "original_sha256": "68b1a6a25d59801e047c22bedb5f3588db046417332af07c293a6649725aebed",
+      "overlay_sha256": "3e4ef808bfce4f1aae009513570ee4a9211c40d229f8f3ab07b963126d3d8ee8"
+    },
+    {
+      "path": "src/GZCTF/ClientApp/src/components/AwdpPatchPanel.tsx",
+      "original_sha256": null,
+      "overlay_sha256": "25b50f2a3ba395418f5f46a31d1da86d564480c98f235085256ee62441b28e54"
+    },
+    {
+      "path": "src/GZCTF/ClientApp/src/components/GameChallengeModal.tsx",
+      "original_sha256": "89437788d53ae70305137fab0136c401e5cd27a47e8719059398bd437f168d3b",
+      "overlay_sha256": "cad4df2d828a234d385fe7d929320a3aacd31c220304b85982ab9c5b1a3d20c6"
+    },
+    {
+      "path": "src/GZCTF/ClientApp/src/Api.ts",
+      "original_sha256": "cc3c2b8e8699be494fd1a6266e570646de23197737ffea808ad19d2394d1fb6a",
+      "overlay_sha256": "27f4f1088b1f6ba48a4525a08373fad3df3a5a8c45878ecf497a8f2cd4db858f"
+    },
+    {
+      "path": "src/GZCTF/Services/Awdp/AwdpWorker.cs",
+      "original_sha256": null,
+      "overlay_sha256": "12b8bbc33ea45555c4753fe7f37a56ae7af0d66b560c4a6ea1c2f25ffdba82b8"
+    },
+    {
+      "path": "src/GZCTF/Services/Awdp/AwdpScoring.cs",
+      "original_sha256": null,
+      "overlay_sha256": "009ca9d1a33f5f40942401e0cb77eec0aa096a91d2b41f3fbc64e857cde20ed4"
+    },
+    {
+      "path": "src/GZCTF/Services/Awdp/AwdpQueue.cs",
+      "original_sha256": null,
+      "overlay_sha256": "6b1579161227a6400e2bcc8dc8efb5a67b4b4d898e61efea3063f46edb06a5d5"
+    },
+    {
+      "path": "src/GZCTF/Services/Awdp/AwdpLedger.cs",
+      "original_sha256": null,
+      "overlay_sha256": "c76fdd6da3cdee93997cef88c6073178712465b0964adecff3842e04383bbd00"
+    },
+    {
+      "path": "src/GZCTF/GZCTF.csproj",
+      "original_sha256": "711aeefde478030d5d53507f26e7d263e50ba248a8db31ecb11da23233c22d4e",
+      "overlay_sha256": "bd713c3a33f09937a6299a7278cd217027fdf0aa7f640b2fabd1e31b1617f7e8"
+    },
+    {
+      "path": "src/GZCTF/Program.cs",
+      "original_sha256": "74d4b2534a9834fee3c92fa2e01ed46e6a4728e9852df23f4bb1984abcf85034",
+      "overlay_sha256": "89a3e19d4af8f5a0aab9ad4b565b6bdbc30315ecab7d85e3a08f08e4b5f324c6"
+    },
+    {
+      "path": "src/GZCTF/Repositories/GameRepository.cs",
+      "original_sha256": "51885b33d27ea2d283597e1aacb4809267a1ff61a8524fd2cc739ac9f6380171",
+      "overlay_sha256": "1356f7605700a8d331358925f5294f498d08cb16075dca520ab7fbf9eb6cea18"
+    },
+    {
+      "path": "src/GZCTF/Controllers/GameController.cs",
+      "original_sha256": "f349b8410adf4323100145b0e4c41970d84ec9defe8708e2aeea1644fe038d74",
+      "overlay_sha256": "2cc038d19599e463b87ba00172c610d2bbf98e9ede68ced393afb2ff74b6133b"
+    },
+    {
+      "path": "src/GZCTF/Controllers/GameController.Awdp.cs",
+      "original_sha256": null,
+      "overlay_sha256": "83e2d4707a0a409f2c45673aa6a758f8ba345db47e5a51c95d5a80c530efd160"
+    },
+    {
+      "path": "src/GZCTF/Models/Request/Game/ScoreboardModel.cs",
+      "original_sha256": "4b1db8cc2467915f4db6d12783467c5e584c438d9d61d7b3b0987155a6badfd4",
+      "overlay_sha256": "25379153d5265470d3c39dad7cd23f6a8c2a8d6f4870b5c941530342345f95a7"
+    },
+    {
+      "path": "src/GZCTF/Models/AppDbContext.cs",
+      "original_sha256": "1136cb1b40d65aa7275972f075dd238c5683bd604ef0272087e47eea3f989354",
+      "overlay_sha256": "6160a03b57be10bcc8dd8eb6524bed538b60640123eea9c03d6cad2a6aae4a7a"
+    },
+    {
+      "path": "src/GZCTF/Migrations/AppDbContextModelSnapshot.cs",
+      "original_sha256": "e2bcb5ba94b7a0ae1bc38f5a69d1053e430ceb91be09d694b7dfb3bfb9cd3764",
+      "overlay_sha256": "6adaa85ab2eff97088385e013672c846f38503067bb74b3be535915c5ed93a66"
+    },
+    {
+      "path": "src/GZCTF/Migrations/20260920053850_AddAwdpSubmissionLedger.Designer.cs",
+      "original_sha256": null,
+      "overlay_sha256": "3663894019377e1ccf205d697b93df295745ebee245cfa31fc48231a7a915045"
+    },
+    {
+      "path": "src/GZCTF/Migrations/20260920053850_AddAwdpSubmissionLedger.cs",
+      "original_sha256": null,
+      "overlay_sha256": "c89b1da31e18b3eab7bd01a5a13ea675517b93f8d7e97e7566eeb905b8152307"
+    },
+    {
+      "path": "src/GZCTF/Models/Data/AwdpSubmission.cs",
+      "original_sha256": null,
+      "overlay_sha256": "49560236e4d582919352eabf70b00e5e97911d644ef3f866b3f875789672e3f3"
+    }
+  ],
+  "support_files": [
+    {
+      "path": "awdp/deploy/attack_entrypoint.py",
+      "original_sha256": null,
+      "overlay_sha256": "355fe73ba03d5027f4a9eabdb6ed467c5eb05f4394f2d44297fd8e368ecb4a68"
+    },
+    {
+      "path": "awdp/deploy/attack.Dockerfile",
+      "original_sha256": null,
+      "overlay_sha256": "4580aab7eced3f5ed6e4c96cb6f1ee3cc537c99a56311422c76df05900bb9c6e"
+    },
+    {
+      "path": "awdp/deploy/compose.yaml",
+      "original_sha256": null,
+      "overlay_sha256": "2d9119a1c87b25fd595b6aca928da3dd32d1b9e1541ab53a258065397c0e9a3b"
+    },
+    {
+      "path": "awdp/deploy/Dockerfile",
+      "original_sha256": null,
+      "overlay_sha256": "6d6823d71e9ae5aa4810f44e4b1c66e1a33c94e15eb74682472e26fce1e0aedc"
+    },
+    {
+      "path": "awdp/deploy/Dockerfile.dockerignore",
+      "original_sha256": null,
+      "overlay_sha256": "eb80bce440ee296403518cb564b1f5f75abdb68319a96c4dd6f0413ba3440ded"
+    },
+    {
+      "path": "awdp/deploy/init.py",
+      "original_sha256": null,
+      "overlay_sha256": "55df899e908376019e2f146944301392101c8ba907a9699131a4ccc7f9ee8347"
+    },
+    {
+      "path": "awdp/deploy/map_challenge.py",
+      "original_sha256": null,
+      "overlay_sha256": "92d1d16b9e553756a9d277cb0b13bce7aa55bd2eca07654ddc21c628623a83c2"
+    },
+    {
+      "path": "awdp/deploy/prepare_attack_network.py",
+      "original_sha256": null,
+      "overlay_sha256": "19df734801e1d7f29f7b4d4d0d297b25e36dcaefed54bf325db9739b68ee8d30"
+    },
+    {
+      "path": "awdp/deploy/README.md",
+      "original_sha256": null,
+      "overlay_sha256": "70c1eb652f0c17a353c318c4c58a23e09266b369eb82a7fad5b8093901871001"
+    },
+    {
+      "path": "awdp/deploy/stage_files.py",
+      "original_sha256": null,
+      "overlay_sha256": "303fbbf50be64aa2d007b981886d04d335c4603742406cf470f8ef041b02fb98"
+    },
+    {
+      "path": "awdp/deploy/verify.sh",
+      "original_sha256": null,
+      "overlay_sha256": "c7ecde6ebdfd4c2deac930a9409bc4b58a99eb7e538c4d4d57d09cd28dd481b3"
+    },
+    {
+      "path": "awdp/README.md",
+      "original_sha256": null,
+      "overlay_sha256": "ba8b8c3e1820fadfebb754493d2daabd47d58743a8a559999d6323720fdb29a9"
+    },
+    {
+      "path": "awdp/runner/awdp_runner.py",
+      "original_sha256": null,
+      "overlay_sha256": "0f785e17c757d4c3b69724f63cdcc762020887e652f1a2240229efe8ce3de49a"
+    },
+    {
+      "path": "awdp/runner/test_runner.py",
+      "original_sha256": null,
+      "overlay_sha256": "5f0a23be2797c52462455cfe6b4ed172dd1f45fe9517d4352fadcb451f86628c"
+    },
+    {
+      "path": "awdp/validation/Program.cs",
+      "original_sha256": null,
+      "overlay_sha256": "dc97eecd531e412f2c91144718ee943aa9d7315b75338c5b903ca330233e6051"
+    },
+    {
+      "path": "awdp/validation/QueueValidation.csproj",
+      "original_sha256": null,
+      "overlay_sha256": "730095cc41bb3a38c32cb39e62772c60289493599b1bf632829b76305e219cc8"
+    },
+    {
+      "path": "docs/COMMANDS.md",
+      "original_sha256": null,
+      "overlay_sha256": "21d0975aa33e82fcf8e2d49a73815f2f21f617b4f7651ea1fc5e7e3d1d595b66"
+    },
+    {
+      "path": "docs/DEPLOYMENT.md",
+      "original_sha256": null,
+      "overlay_sha256": "eb6f83c73024483af7c540ce9d287c2475c672f07a92fd77058add642da14c76"
+    },
+    {
+      "path": "docs/PATCHES.md",
+      "original_sha256": null,
+      "overlay_sha256": "a30a9aaefc39897de435315dd1292f892599ae14cf5670895aed57e342605468"
+    },
+    {
+      "path": "docs/VERIFICATION.md",
+      "original_sha256": null,
+      "overlay_sha256": "1b9cf37aeac0c3d599366b4b89f7cc3ae7ab481b1853abb4d771dea49a0ab6bc"
+    }
+  ]
+}

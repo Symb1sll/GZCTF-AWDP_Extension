@@ -1,0 +1,19 @@
+--- a/src/app.py
++++ b/src/app.py
+@@ -9,7 +9,15 @@
+ 
+ 
+ def read_attachment(name):
+-    return (ROOT / name).read_bytes()
++    base = ROOT.resolve()
++    candidate = (base / name).resolve()
++    try:
++        candidate.relative_to(base)
++    except ValueError:
++        raise ValueError('outside attachment directory')
++    if not candidate.is_file():
++        raise ValueError('not a file')
++    return candidate.read_bytes()
+ 
+ 
+ class Handler(http.server.BaseHTTPRequestHandler):
