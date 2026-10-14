@@ -46,24 +46,22 @@ python3 extension/tools/apply_overlay.py --upstream upstream --check
 python3 extension/tools/apply_overlay.py --upstream upstream
 ```
 
-发布前审查本地文件时，可直接将候选目录作为 `extension/` 使用；仓库发布后才可执行上述第一条 clone 命令。
-
 安装器也将 `awdp/` 和 `docs/` 复制到上游工作目录，用于 Docker 构建及保留部署说明；不安装服务、不访问服务器、不修改数据库。目标已有不同内容时拒绝覆盖。可信同版本源码压缩包可显式使用 `--source-archive`，此时只校验涉及文件的摘要，不能验证 Git HEAD；不要对未知版本使用。
 
 ## 构建与部署
 
 运行前提：同机原生 Linux、rootful Docker Engine、Compose v2、systemd、Python 3.8+、AppArmor `docker-default` 及可用的 CPU/内存/PID 资源限制；Web、Runner 和 CLI 必须使用同一个 `/var/run/docker.sock`。当前脚本不是 Docker Desktop、远程 Docker、rootless、Swarm 或 Kubernetes 的安装方案。
 
-历史环境记录为 Ubuntu 20.04.3 LTS、Docker 26.0.0、Compose 2.25.0、Buildx 0.13.1；这是测试记录，不是当前版本推荐或最低版本承诺。Docker 构建使用 Node.js 22、pnpm 10.6.2 和 .NET 9；若脱离 Docker 手动构建，还须遵循上游 `src/global.json`（SDK 9.0.201、`rollForward=latestMinor`）。项目镜像由仓库内 Dockerfile 构建，底层使用公开的 Ubuntu、Node.js、.NET 和 PostgreSQL 基础镜像，不是下载现成的 AWDP 功能镜像。
+部署参考环境为 Ubuntu 20.04.3 LTS、Docker 26.0.0、Compose 2.25.0、Buildx 0.13.1；该组合不是当前版本推荐或最低版本承诺。Docker 构建使用 Node.js 22、pnpm 10.6.2 和 .NET 9；若脱离 Docker 手动构建，还须遵循上游 `src/global.json`（SDK 9.0.201、`rollForward=latestMinor`）。项目镜像由仓库内 Dockerfile 构建，底层使用公开的 Ubuntu、Node.js、.NET 和 PostgreSQL 基础镜像，不是下载现成的 AWDP 功能镜像。
 
 实施顺序：环境与存储核查 → 扩展集成及镜像构建 → 独立测试部署 → 功能回归 → 正式数据备份 → 同机 Web 接入 → 题目绑定 → 最终验收。
 
-历史方案的独立测试实例监听 `127.0.0.1:18091`，使用 PostgreSQL 16；正式接入保留同一虚拟机的 `8091`、原 PostgreSQL 17.4 和附件目录。Web/数据库由 Compose 管理，Runner 由 systemd 管理。正式接入工具针对特定路径和服务名称，不是通用迁移工具。
+独立测试实例监听 `127.0.0.1:18091`，使用 PostgreSQL 16；正式接入保留同一虚拟机上既有的 `8091` 入口、数据库和附件目录。正式接入的参考数据库版本为 PostgreSQL 17.4，工具不会自动升级或降级数据库。Web/数据库由 Compose 管理，Runner 由 systemd 管理。正式接入工具针对固定路径和服务名称，不是通用迁移工具。
 
 - [部署说明](docs/DEPLOYMENT.md)：构建、独立测试、正式接入前提及回退边界。
 - [题目部署命令速查](docs/COMMANDS.md)：查询 ID、绑定示例题、检查服务。
 - [补丁制作与修改](docs/PATCHES.md)：从原始源码生成完整 UTF-8 unified diff。
-- [验证及发布整理说明](docs/VERIFICATION.md)：历史部署证据与本次本地检查的区别。
+- [测试与部署验收](docs/VERIFICATION.md)：自动化测试、功能验收及验证边界。
 
 示例题配置：动态 Flag、攻击镜像 `awdp/gzctf-ticket-attack:1.0`、容器端口 `8080`、选手包 `ticket-player.tar.gz`。绑定脚本只绑定到 `ticket-attachments` checker，修复分固定 100；其他题目须编写自己的 target/checker 并调整配置。
 
@@ -76,7 +74,7 @@ python3 extension/tools/apply_overlay.py --upstream upstream
 | Docker 能运行，判题仍无法启动 | Runner 固定要求 AppArmor `docker-default`、rootful 本机 socket 和资源限制。先检查宿主机与 Docker context，不要删掉隔离参数来绕过失败。 |
 | 构建卡在下载、字体或包依赖 | 除 Docker registry、npm/pnpm、NuGet、apt 外，上游 Vite 还请求 Google Fonts。提前检查构建网络/代理；仓库不提供离线依赖或可复现的镜像 digest 快照。 |
 | `/srv/awdp` 有空间，构建却耗尽根分区 | DockerRootDir、构建缓存可能仍在根分区。分别核查 Docker 存储、AWDP 数据、数据库及备份空间；容器配额不是宿主机最低配置。 |
-| 初始化/准备失败，重跑提示目录已存在 | 新版先在私有临时目录写完整文件，生产 Compose 校验先于写入；失败临时目录保留供排查。旧版遗留目录要人工核查归档，不要直接删除正式数据，也不要反复初始化已有实例。 |
+| 初始化/准备失败，重跑提示目录已存在 | 工具先在私有临时目录写完整文件，生产 Compose 校验先于写入；失败临时目录保留供排查。已存在的运行目录要人工核查，不要直接删除正式数据，也不要反复初始化已有实例。 |
 | 重建镜像后判题使用旧代码 | tag 可以变化，Runner 白名单固定 image ID。重建 target/checker 后必须评审更新白名单并重新验收；正式 Web 要使用真正验收过的 image ID。 |
 | 18091 外部打不开或题目实例不可达 | 测试入口和默认攻击端口绑定 localhost，应使用 SSH 隧道；测试攻击网络不等于断网判题网络。正式接入保留原 `PublicEntry`/网络，须自行核查路由、端口和防火墙。 |
 | 首页 200、`/healthz` 返回 HTML，就认为验收成功 | 前端 fallback 可能返回页面，首页只证明入口可达；还须核查迁移、Runner、补丁结果与计分。应用容器不保证有 curl，检查应从宿主机执行，并等待启动完成。 |
@@ -84,15 +82,15 @@ python3 extension/tools/apply_overlay.py --upstream upstream
 | 随便绑定一道题或比赛中运行绑定 | 绑定脚本只适配工单 checker，且会短暂重启正式 Web；先核对比赛/题目归属，只在空闲维护窗口运行。其他题目须单独实现 checker。 |
 | 接入后重建丢失配置，或误以为换旧镜像即可回退 | 正式 Web 重建必须同时使用原 Compose 和 AWDP override。首次启动会新增数据库迁移；回退涉及 schema 与新增数据，切换前须准备一致性备份及恢复方案。 |
 
-具体检查与操作见[部署说明](docs/DEPLOYMENT.md)。新增生产预检为 `prepare_gzctf_production.py --expected-image-id … --check`，不写文件或切换服务；版本标记及迁移表检查不能替代自定义数据库审计和功能验收。不要修改版本标记或迁移表来绕过检查。
+具体检查与操作见[部署说明](docs/DEPLOYMENT.md)。生产接入预检使用 `prepare_gzctf_production.py --expected-image-id … --check`，不写文件或切换服务；版本标记及迁移表检查不能替代自定义数据库审计和功能验收。不要修改版本标记或迁移表来绕过检查。
 
 ## 验证与安全边界
 
-历史测试环境验证过正确/错误补丁、正常业务、重复修复去重、多队伍/新比赛隔离、正常重启持久化。正式接入后的最终题目验收由部署者自行完成并确认；详细边界见[验证说明](docs/VERIFICATION.md)。历史验收不代表重新部署自动通过。
+部署验收应覆盖正常业务、正确/错误补丁、重复修复去重、队伍与比赛隔离、排行榜及正常重启后的状态持久化。自动化测试不能替代目标环境的端到端验收，具体步骤见[测试与部署验收](docs/VERIFICATION.md)。
 
 判题 target 无外网，checker 共享 target 网络命名空间；容器使用非 root 用户、只读根文件系统、能力删除及资源限制。测试在线攻击实例使用单独 bridge 网络，并非断网判题容器。Web 挂载 Docker socket，Runner 以 root 运行，均属于可信控制面；Docker 共享宿主机内核，不是虚拟机级隔离。
 
-默认 Runner 最多并行 3 个任务，不提供大规模容量保证。checker 是有限回归测试，不是任意补丁安全性的完整证明。复杂负载、全部异常场景、上游依赖警告处理及备份恢复演练未在记录中全部完成，正式比赛前仍需评估。
+默认 Runner 最多并行 3 个任务，不提供大规模容量保证。checker 是有限回归测试，不是任意补丁安全性的完整证明。正式比赛前还需完成容量评估、异常恢复测试、依赖检查及备份恢复演练。
 
 ## 许可与归属
 

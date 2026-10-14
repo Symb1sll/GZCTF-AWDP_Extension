@@ -8,4 +8,4 @@
 - `map_challenge.py`：测试绑定，调用前停止测试 Web，写入后再启动。
 - `verify.sh`：首页、端口、网络、Runner 和数据库检查，不替代浏览器提交/计分验收。
 
-原记录中 `/healthz` 曾返回 SPA HTML，不能误当作专门健康检查。本版本检查首页，并保留数据库和浏览器验收要求。
+平台的前端 fallback 可能让未知路径返回 SPA HTML，不能仅凭 HTTP 200 判断后端健康。`verify.sh` 检查首页可达性及基础设施状态，补丁提交和计分仍需按 [验收指南](../../docs/VERIFICATION.md) 验证。

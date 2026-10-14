@@ -10,4 +10,4 @@
 
 攻击镜像在 `awdp/deploy/attack.Dockerfile` 中构建，适配 GZCTF 注入的 `GZCTF_FLAG`，不写死正式 Flag。判题使用独立夹具 Flag，不是攻击得分答案。
 
-本仓库是公开示例题，正式比赛应使用未公开答案的题目、审核 checker 并保护管理员包。旧独立 API 原型 `install.sh` / `register.py` 不属于集成流程，未收入发布目录。
+本仓库是公开示例题，正式比赛应使用未公开答案的题目、审核 checker 并保护管理员包。部署和题目绑定步骤见 [命令速查](../../docs/COMMANDS.md)。

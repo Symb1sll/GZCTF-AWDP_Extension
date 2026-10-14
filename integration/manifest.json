@@ -178,7 +178,7 @@
     {
       "path": "awdp/deploy/README.md",
       "original_sha256": null,
-      "overlay_sha256": "70c1eb652f0c17a353c318c4c58a23e09266b369eb82a7fad5b8093901871001"
+      "overlay_sha256": "66740359d1659c9ba13900dcceabcc64ea79bf6a2e66b94f9a73895863ee1969"
     },
     {
       "path": "awdp/deploy/stage_files.py",
@@ -193,7 +193,7 @@
     {
       "path": "awdp/README.md",
       "original_sha256": null,
-      "overlay_sha256": "ba8b8c3e1820fadfebb754493d2daabd47d58743a8a559999d6323720fdb29a9"
+      "overlay_sha256": "74045233bb02655bb0753fe5f89854d421b1b58a3cf3239bd93ee491ac610376"
     },
     {
       "path": "awdp/runner/awdp_runner.py",
@@ -218,12 +218,12 @@
     {
       "path": "docs/COMMANDS.md",
       "original_sha256": null,
-      "overlay_sha256": "21d0975aa33e82fcf8e2d49a73815f2f21f617b4f7651ea1fc5e7e3d1d595b66"
+      "overlay_sha256": "c40d2d9c0ab6293fd27d976a922758a5b990a0deb12d458ffec30d19251a6a11"
     },
     {
       "path": "docs/DEPLOYMENT.md",
       "original_sha256": null,
-      "overlay_sha256": "eb6f83c73024483af7c540ce9d287c2475c672f07a92fd77058add642da14c76"
+      "overlay_sha256": "f81ef47a8a53c3ad49d471f5679b091ad8668b9f2d32d8186c5a4cc2e128d707"
     },
     {
       "path": "docs/PATCHES.md",
@@ -233,7 +233,7 @@
     {
       "path": "docs/VERIFICATION.md",
       "original_sha256": null,
-      "overlay_sha256": "1b9cf37aeac0c3d599366b4b89f7cc3ae7ab481b1853abb4d771dea49a0ab6bc"
+      "overlay_sha256": "65aac1e0cb0e9c8c4ce830981093a4f417867286449190e5d7c4b9b9590d91c8"
     }
   ]
 }

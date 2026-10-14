@@ -1,6 +1,6 @@
 # 构建、测试与正式接入
 
-这是原实施方案的整理，不是任意服务器的一键安装。命令用于 Linux Bash；先阅读 README 的许可、权限和隔离边界。
+本指南说明独立测试部署及同机正式接入流程。命令用于 Linux Bash；执行前阅读 README 的许可、权限和隔离边界，并核对目标环境是否符合工具要求。
 
 ## 1. 前置环境
 
@@ -8,7 +8,7 @@
 
 当前方案要求同机原生 Linux、rootful Docker Engine、Compose v2、systemd、Python 3.8+、curl。CLI、Web 和 Runner 使用同一个 `/var/run/docker.sock`，不能把 CLI 指向远程 Docker，却让队列和 bind mount 留在本机。Runner 固定使用 AppArmor `docker-default` 以及内存/CPU/PID 限制，缺少支持时不要删参数绕过。Docker Desktop、rootless、Swarm、Kubernetes 不在这份脚本的适配范围。
 
-历史环境记录：Ubuntu 20.04.3 LTS、Docker 26.0.0、Compose 2.25.0、Buildx 0.13.1。这些是原部署时的记录，不是最低版本保证或当前软件推荐；换宿主机或工具版本应重新验证。
+部署参考环境为 Ubuntu 20.04.3 LTS、Docker 26.0.0、Compose 2.25.0、Buildx 0.13.1。这些版本不是最低版本保证或当前软件推荐；换宿主机或工具版本应重新验证。独立测试使用 PostgreSQL 16，正式接入的参考数据库版本为 PostgreSQL 17.4；工具不会自动修改正式数据库镜像。
 
 在服务器执行以下只读检查；`/srv/awdp` 未配置前，其相关命令会报错，应先由运维准备挂载点：
 
@@ -50,7 +50,7 @@ python3 extension/challenges/ticket-attachments/tools/build_release.py
 
 构建需要网络：Docker registry（含 Microsoft .NET 镜像）、npm/pnpm、NuGet、apt 镜像源，以及上游 Vite 字体插件请求的 Google Fonts CSS/字体资源。仅能拉镜像不代表前后端构建网络畅通；遇到字体/依赖下载错误，先检查日志、DNS、代理和对应网络，不要假定是 AWDP 代码问题。
 
-基础 Dockerfile 保留原方案的 Ubuntu 20.04 / 软件镜像源，安装 Python 与 `patch`，不是不可变供应链快照。平台 Dockerfile 的 Node 22、.NET 9 标签也没有固定 digest。本仓库不含镜像 tar 或离线依赖，重建 image ID 不保证与原服务器相同；初始化读取本机实际 image ID。没有完整跨架构构建验证记录，不能仅凭 tag 推断 ARM 等架构已兼容。
+基础 Dockerfile 使用 Ubuntu 20.04 和软件镜像源，安装 Python 与 `patch`，不是不可变供应链快照。平台 Dockerfile 的 Node 22、.NET 9 标签也没有固定 digest。本仓库不含镜像 tar 或离线依赖，重建 image ID 可能变化；初始化读取本机实际 image ID，不应复用其他构建的白名单。在 ARM 等非参考架构部署时，须验证全部镜像和运行依赖，不能仅凭 tag 推断兼容性。
 
 生成选手包仅包含 `src/app.py` 和说明，不要将 checker、参考答案或管理员配置作为附件。
 
@@ -87,13 +87,13 @@ sudo docker compose --env-file /srv/awdp-dev/compose.env -f compose.yaml start w
 
 ## 4. 正式前提与备份
 
-原同机接入保留：
+正式接入工具按以下部署约定检查既有平台：
 
-| 项目 | 原方案 |
+| 项目 | 部署约定 |
 | --- | --- |
 | Compose 项目 / Web 服务 | `gzctf` / `gzctf` |
-| 原 Compose / 配置 | `/root/GZCTF/docker-compose.yml` / `/root/GZCTF/appsettings.json` |
-| 原容器 | `gzctf-gzctf-1`、`gzctf-db-1` |
+| 既有 Compose / 配置 | `/root/GZCTF/docker-compose.yml` / `/root/GZCTF/appsettings.json` |
+| 既有容器 | `gzctf-gzctf-1`、`gzctf-db-1` |
 | 端口 | 8091，沿用原绑定 |
 | 正式 AWDP 数据 | `/srv/awdp/gzctf-prod` |
 | 数据库 / 附件 | 保留原 PostgreSQL、`/root/GZCTF/data/files` |
@@ -102,7 +102,7 @@ sudo docker compose --env-file /srv/awdp-dev/compose.env -f compose.yaml start w
 
 本工具仅用于**原 Web 仍为 v1.2.5、尚未接入 AWDP** 的同机部署。它从原运行容器读取 `/app/files/version.txt`，核对原配置只读挂载及环境变量没有覆盖数据库/容器配置，并只读查询原连接字符串指定数据库的 `__EFMigrationsHistory`；要求 7 条记录与 `integration/manifest.json` 的 `upstream_migrations` 完全一致。原库须在 `gzctf-db-1` 中，与 Web 共享网络，连接 Host 指向该容器网络别名、Port=5432；自动预检只支持字母/下划线开头的简单数据库名。非 root Web、远程数据库、特殊连接字符串、已有正式目录/unit、较新/较旧迁移历史均不应强行绕过。
 
-`latest` 只是镜像标签，不能说明实际版本。版本文件是上游启动写入的标记，不是二进制签名；迁移历史一致也不证明自定义 schema 无差异。版本未知或库做过自定义修改时，先另行审计，不修改版本文件/迁移表来通过预检。此项预检是本次发布整理新增的，不声称历史正式切换已有相同查询记录。
+`latest` 只是镜像标签，不能说明实际版本。版本文件是上游启动写入的标记，不是二进制签名；迁移历史一致也不证明自定义 schema 无差异。版本未知或库做过自定义修改时，先另行审计，不修改版本文件或迁移表来通过预检。
 
 先在两个源码目录的父目录运行只读预检，必须保留完整 `extension/`（工具依赖其中的 manifest 和暂存模块，不能只上传单个 prepare 脚本）：
 
@@ -115,7 +115,7 @@ python3 extension/tools/prepare_gzctf_production.py --expected-image-id "$AWDP_T
 
 切换前完成可恢复备份：数据库逻辑导出、原 Compose/配置/附件、容器/镜像元数据，必要时保存原镜像及一致性数据快照。拷贝 PostgreSQL 数据目录须满足一致性要求；不能运行中直接打包当作有效备份。备份名包含 UTC 时间，校验后保存服务器之外的副本。
 
-原流程完成过切换前备份与校验，但无完整恢复演练记录。校验通过不等于恢复验证。没有自身备份和回退准备前，不执行下一节。
+校验摘要只能检查备份文件完整性，不能替代恢复验证。切换前应在隔离环境验证恢复流程，并准备原镜像、配置及数据恢复点。备份和回退准备未完成时，不执行下一节。
 
 ## 5. 接入原 8091
 
@@ -128,7 +128,7 @@ python3 extension/tools/prepare_gzctf_production.py --expected-image-id "$AWDP_T
 
 工具再次检查宿主机、原版本、数据库历史和已验收镜像，拒绝已有正式路径或 unit，复制测试 Runner 和判题 image ID 白名单。Compose 合并先通过 stdin 校验，尚未通过时不会创建正式运行目录；随后在 `/srv/awdp/.gzctf-prod.prepare-*` 私有目录写完整配置、override 和 unit，全部成功才发布到 `/srv/awdp/gzctf-prod`。**只准备文件，不切换服务**。
 
-正常写入失败时保留私有临时目录供排查，最终路径不被占用；重试不会自动清理失败目录。临时目录可能含生产凭据，切勿上传。旧版留下的最终目录或已有安装必须由维护者确认状态、备份/归档后处理，不自动覆盖。此机制不提供断电后的完整事务保证，不允许并发准备。
+正常写入失败时保留私有临时目录供排查，最终路径不被占用；重试不会自动清理失败目录。临时目录可能含生产凭据，切勿上传。已存在的运行目录或服务必须先确认状态、备份或归档，再决定如何处理；工具不自动覆盖。此机制不提供断电后的完整事务保证，不允许并发准备。
 
 核对输出后安装服务并切换 Web：
 
@@ -142,7 +142,7 @@ test ! -e /srv/awdp/gzctf-prod/map_challenge.py && install -o root -g root -m 07
 
 以后重建正式 Web 仍须使用两个 Compose 文件；只用旧文件可能恢复旧镜像/挂载。原数据库和附件沿用旧 Compose，override 新增配置/队列；结果、运行任务及归档对 Web 为只读、Runner 可写。
 
-平台启动涉及数据库迁移，保留数据库容器不代表 schema 不变。原记录未独立回传正式迁移查询；重新部署应主动检查：
+平台启动涉及数据库迁移，保留数据库容器不代表 schema 不变。启动后检查入口、Runner、容器状态和最新迁移：
 
 ```bash
 # 有限重试等待入口，失败则停止后续验收，查看Web日志。
@@ -152,7 +152,7 @@ docker inspect --format 'Status={{.State.Status}} RestartCount={{.RestartCount}}
 docker exec gzctf-db-1 psql -U postgres -d gzctf -v ON_ERROR_STOP=1 -c 'SELECT "MigrationId" FROM "__EFMigrationsHistory" ORDER BY "MigrationId" DESC LIMIT 1;'
 ```
 
-数据库名/用户按自身实例核对；应出现新增迁移 `20260920053850_AddAwdpSubmissionLedger`，否则不要继续绑定。历史测试库曾回传该迁移，正式历史没有独立迁移回传。curl 在宿主机执行，不能假定容器有 curl；首页 200 或 `/healthz` 的 HTML fallback 不证明后端业务健康。未配置 healthcheck 的 Web 不能单凭 `not-configured` 判定异常或健康。
+数据库名和用户按自身实例核对；应出现新增迁移 `20260920053850_AddAwdpSubmissionLedger`，否则不要继续绑定。curl 在宿主机执行，不能假定容器有 curl；首页 200 或 `/healthz` 的 HTML fallback 不证明后端业务健康。未配置 healthcheck 的 Web 不能单凭 `not-configured` 判定异常或健康。
 
 ## 6. 绑定及验收
 

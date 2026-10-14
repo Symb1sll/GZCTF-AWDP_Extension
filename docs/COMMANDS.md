@@ -21,7 +21,7 @@ Runner 白名单使用初始化时的 image ID，重建 target/checker 后需评
 后台建好题目，设置动态 Flag、`awdp/gzctf-ticket-attack:1.0`、端口 8080，上传生成的 `ticket-player.tar.gz`。
 
 ```bash
-# 显式连接gzctf，不是默认postgres库。“题目名称”只是列标题，无需替换。
+# 查询比赛ID、题目ID和名称；按实际环境调整数据库名和用户名。
 docker exec gzctf-db-1 psql -U postgres -d gzctf -v ON_ERROR_STOP=1 -c 'SELECT "GameId" AS "比赛ID", "Id" AS "题目ID", "Title" AS "题目名称" FROM "GameChallenges" ORDER BY "GameId", "Id";'
 
 # ID占位换成正整数，仅工单checker、修复100分；会短暂重启正式Web。
@@ -35,7 +35,7 @@ systemctl is-active gzctf-awdp-prod-runner.service
 docker ps -a --filter label=gzctf.awdp.prod.managed=true --format 'table {{.Names}}\t{{.Status}}'
 ```
 
-已验收题目不重复绑定。`relation "GameChallenges" does not exist` 时先核对实际数据库，不要在错误数据库建表。表/字段对应基线源码，此修正版查询无历史独立服务器回传记录。
+已绑定题目不重复绑定。`relation "GameChallenges" does not exist` 时先核对实际数据库，不要在错误数据库建表。以上表名和字段对应 GZCTF v1.2.5 基线，查询需要显式连接业务数据库。
 
 ## 制作及调整补丁（选手本地 Linux / WSL）
 
